@@ -13,9 +13,23 @@ class Student:
                 lecturer.grades[course] += [grade]
             else:
                 lecturer.grades[course] = [grade]
-
         else:
             return 'Ошибка'
+
+    def _average_grade(self):
+        grade = []
+        for value in self.grades.items():
+            grade.extend(value)
+        return round(sum(grade)/len(grade), 2)
+
+    def __str__(self):
+        res = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self._average_grade}\nКурсы в процессе изучения: {self.courses_in_progress}\nЗавершенные курсы: {self.finished_courses}'
+        return res
+
+    def __lt__(self, other):
+        if isinstance(other, Student) and self.grades and other.grades:
+            return self._average_grade() < other._average_grade()
+        return 'Error'
 
 
 class Mentor:
@@ -27,8 +41,24 @@ class Mentor:
 
 class Lecturer(Mentor):
     def __init__(self, name, surname):
+        super().__init__(name, surname)
         self.grades = {}
         self.courses_in_progress = []
+
+    def _average_grade(self):
+        grade = []
+        for value in self.grades.items():
+            grade.extend(value)
+        return round(sum(grade)/len(grade), 2)
+
+    def __str__(self):
+        res = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self._average_grade}'
+        return res
+
+    def __lt__(self, other):
+        if isinstance(other, Lecturer) and self.grades and other.grades:
+            return self._average_grade() < other._average_grade()
+        return 'Error'
 
 
 class Reviewer(Mentor):
@@ -42,6 +72,10 @@ class Reviewer(Mentor):
 
         else:
             return 'Ошибка'
+
+    def __str__(self):
+        res = f'Имя: {self.name}\nФамилия: {self.surname}'
+        return res
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
@@ -63,3 +97,6 @@ best_student.rate(best_lecturer, 'Python', 10)
 
 print(best_student.grades)
 print(best_lecturer.grades)
+print(cool_reviewer)
+print(best_lecturer)
+print(best_student)
